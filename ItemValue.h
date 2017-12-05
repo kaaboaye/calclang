@@ -10,9 +10,10 @@
 #include "Operator.h"
 
 typedef union {
-  int64_t Int;
-  long double Float;
+  long double Number;
   Operator Operator;
+  long double (*Procedure) (void);
+  char *Name;
 } ItemValue;
 
 

@@ -13,10 +13,11 @@
 #include "Storage.h"
 
 static Storage *storage;
-static Variable root;
+static Variable tmpVar;
 static FILE *input;
+static bool isReadingComment;
 
-void LexStart(Storage *s, FILE *in);
+void LexInit(Storage *s, FILE *in);
 bool LexUpdate(void);
 
 #endif //CALCLANG_LEX_H

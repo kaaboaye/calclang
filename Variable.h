@@ -11,15 +11,20 @@
 
 #include "Item.h"
 
+#define MAX_VARIABLE_NAME_LEN 128
+
 typedef struct {
-  int Count; // Ammount of items
-  int NameId; // Id of variable's name
+  int Id; // Id of the variable
+  char *Name; // Variable's name
+  unsigned int Count; // Amount of items
   Item *Items; // Array of items
   Item *LastItem; // Last added item
 } Variable;
 
 Variable newVariable(void);
 void VariableAddItem(Variable *v);
-bool ReadVariable(Variable *v, FILE *f);
+void VariableJoin(Variable *out, const Variable *in);
+void VariableClean(Variable *v);
+void VariableReadName(FILE *input, char *name, int len);
 
 #endif //CALCLANG_VARIABLE_H

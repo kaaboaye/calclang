@@ -1,0 +1,6 @@
+# Te dziwne wyrazy bo muszo być
+razy: *;
+jest: =;
+plus: +;
+
+2 plus pi razy e jest

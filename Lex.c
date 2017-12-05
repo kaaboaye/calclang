@@ -7,24 +7,36 @@
 #include "Variable.h"
 #include "Item.h"
 #include "ItemValue.h"
+#include "NativeVariables.h"
 
-void LexStart(Storage *s, FILE *in) {
-  root = newVariable();
+void LexInit(Storage *s, FILE *in) {
+  NativeVariablesInit();
   storage = s;
+  s->LexStorage = newVariable();
   input = in;
+  isReadingComment = false;
 }
 
 bool LexUpdate() {
   int c;
   
   // Read character
-  if (EOF == (c = fgetc(input))) {
-    return false;
+  if (EOF == (c = DebuggerGetC(input))) {
+    return false; // break;
   }
   
-  // Detect newline
-  if (c == '\n') {
-    DebuggerWasNewLine();
+  // Ignore comments
+  if (!isReadingComment && c == '#') {
+    isReadingComment = true;
+    return true;
+  }
+
+  if (isReadingComment && c != '\n') {
+    return true;
+  }
+  
+  if (isReadingComment && c == '\n') {
+    isReadingComment = false;
     return true;
   }
   
@@ -33,46 +45,17 @@ bool LexUpdate() {
     return true;
   }
   
-  // Read variable
-//  if (isalpha(c)) {
-//    ungetc(c, input);
-//
-//    Variable var = newVariable();
-//    ReadVariable(&var, input);
-//  }
-  
   // Read item
   {
-    ungetc(c, input);
+    DebuggerUnGetC
+        (c, input);
     
-    Item item;
+    Item tmpItem;
+    ReadItem(&tmpItem, input);
     
-    ReadItem(&item, input);
-  
-    switch (item.Type){
-      case type_int:
-        printf("Int: %d\n", item.Value.Int);
-        break;
-      case type_float:
-        printf("Float: %Lf\n", item.Value.Float);
-        break;
-      case type_operator:
-        switch (item.Value.Operator) {
-          case operator_addition:
-            puts("Addition");
-            break;
-          case operator_subtraction:
-            puts("Subtraction");
-            break;
-          case operator_equals:
-            puts("Equals");
-            break;
-        }
-        break;
-    }
+    VariableAddItem(&storage->LexStorage);
+    (*storage->LexStorage.LastItem) = tmpItem;
     
-    VariableAddItem(&root);
-    (*root.LastItem) = item;
     return true;
   }
 }

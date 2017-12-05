@@ -7,9 +7,10 @@
 
 typedef enum {
   type_nan,
-  type_int,
-  type_float,
+  type_number,
   type_operator,
+  type_procedure,
+  type_name,
 } ItemType;
 
 #endif //CALCLANG_ITEMTYPE_H

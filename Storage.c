@@ -3,17 +3,18 @@
 //
 
 #include "Storage.h"
-#include "VariableName.h"
 #include "Variable.h"
 
 Storage newStorage(void) {
   Storage s;
   
+  s.LexStorage = newVariable();
+  
+  s.ByteCodeCount = 0;
+  s.ByteCode = (Variable *) malloc(0);
+  
   s.VariablesCount = 0;
   s.Variables = (Variable *) malloc(0);
-  
-  s.VariableNamesCount = 0;
-  s.Names = (VariableName *) malloc(0);
   
   return s;
 }
@@ -22,21 +23,20 @@ void StorageAddVariable(Storage *s) {
   s->VariablesCount++;
   s->Variables = (Variable *) realloc(s->Variables, (s->VariablesCount * sizeof(Variable)));
   s->LastVariable = &s->Variables[s->VariablesCount - 1];
-  
-  s->LastVariable->NameId = VAR_UNNAMED;
 }
 
-void StorageAddVariableName(Storage *s, const unsigned char *name) {
-  s->VariableNamesCount++;
-  s->Names = (VariableName *) realloc(s->Variables, (s->VariableNamesCount * sizeof(VariableName)));
-  
-  s->LastName = &s->Names[s->VariableNamesCount -1];
-  s->LastName->Name = malloc(strlen(name) + 1);
-  strcpy(s->LastName->Name, name);
+void StorageAddByteCode(Storage *s) {
+  s->ByteCodeCount++;
+  s->ByteCode = (Variable *) realloc(s->ByteCode, (s->ByteCodeCount * sizeof(Variable)));
+  s->LastByteCode = &s->ByteCode[s->ByteCodeCount - 1];
 }
 
-void StorageAssignNameVariable(Storage *s, const unsigned char *name, Variable *var) {
-  StorageAddVariableName(s, name);
+Variable VariableFindByName(const Storage *s, const char *name) {
+  for (unsigned int i = 0; i < s->VariablesCount; ++i) {
+    if (strcmp(s->Variables[i].Name, name) == 0) {
+      return s->Variables[i];
+    }
+  }
   
-  var->NameId = s->VariableNamesCount - 1;
+  return newVariable();
 }
