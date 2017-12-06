@@ -44,7 +44,7 @@ void VariableReadName(FILE *input, char *name, int len) {
       return;
     }
     
-    if (!isalnum(c)) {
+    if (!(isalnum(c) || c == '_')) {
       DebuggerUnGetC(c, input);
       name[i] = 0;
       return;

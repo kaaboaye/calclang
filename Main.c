@@ -14,10 +14,11 @@
 #include "ItemValue.h"
 #include "Compiler.h"
 #include "ExitCodes.h"
+#include "Runtime.h"
 
 int main() {
   Storage storage = newStorage();
-  FILE *input = fopen("input.txt", "r");
+  FILE *input = stdin;
   FILE *output = stdout;
   FILE *errorout = stderr;
   FILE *warnout = stderr;
@@ -40,11 +41,17 @@ int main() {
     return WAS_COMPILE_ERROR;
   }
   
-  for (unsigned int x = 0; x < storage.ByteCodeCount; x++) {
-    for (int i = 0; i < storage.ByteCode[x].Count; i++) {
-      DebuggerPrintItem(&storage.ByteCode[x].Items[i]);
-    }
-  }
+  // Dump ByteCode
+//  for (unsigned int x = 0; x < storage.ByteCodeCount; x++) {
+//    for (int i = 0; i < storage.ByteCode[x].Count; i++) {
+//      DebuggerPrintItem(&storage.ByteCode[x].Items[i]);
+//    }
+//  }
+  
+  // Run the ByteCode
+  RuntimeInit(&storage, output);
+  RuntimeRun();
+  
   
   return 0;
 }

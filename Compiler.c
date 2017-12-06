@@ -61,8 +61,8 @@ void CompilerCompile() {
                  storage->LexStorage.Items[i + 1].Type == type_operator &&
                  storage->LexStorage.Items[i + 1].Value.Operator == operator_colon
                 ) {
-              // 21 is "Overriding variable: " len
-              char err[21 + MAX_VARIABLE_NAME_LEN] = "Overriding variable: ";
+              // 28 is "Overriding native variable: " len
+              char err[28 + MAX_VARIABLE_NAME_LEN] = "Overriding native variable: ";
               strcat(err, lexItem->Value.Name);
   
               DebuggerWarning(lexItem->Line, err);
@@ -174,6 +174,7 @@ void CompilerCompile() {
               // Start a new equation
               if (i != ByteLex.Count - 1) {
                 StorageAddByteCode(storage);
+                (*storage->LastByteCode) = newVariable();
               }
   
               break;
