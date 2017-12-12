@@ -9,12 +9,12 @@
 #include "Variable.h"
 #include "ItemsStack.h"
 
-static long double equationAns;
+static mpf_t equationAns;
 
 void EquationInit();
 Item EquationSolve(const Variable *in);
 Item EquationRPNSolve(const Variable *in);
 void EquationToRPN(const Variable *in, Variable *out);
-long double EquationGetAns();
+void EquationGetAns(mpf_t num);
 
 #endif //CALCLANG_EQUATION_H

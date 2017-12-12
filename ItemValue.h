@@ -6,13 +6,14 @@
 #define CALCLANG_ITEMVALUE_H
 
 #include <stdint.h>
+#include <gmp.h>
 
 #include "Operator.h"
 
 typedef union {
-  long double Number;
+  mpf_t Number;
   Operator Operator;
-  long double (*Procedure) (void);
+  void (*Procedure) (mpf_t);
   char *Name;
 } ItemValue;
 

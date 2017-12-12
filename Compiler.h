@@ -7,9 +7,13 @@
 
 #include "Storage.h"
 
-static Storage *storage;
+typedef struct {
+  Storage *storage;
+} Compiler;
 
-void CompilerInit(Storage *s);
-void CompilerCompile();
+Compiler newCompiler(Storage *s);
+
+void CompilerCompile(Compiler *c);
+void CompileVariables(Compiler *c, Variable *in, Variable *out);
 
 #endif //CALCLANG_COMPILER_H

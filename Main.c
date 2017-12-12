@@ -3,6 +3,7 @@
 //
 
 #include <stdio.h>
+#include <float.h>
 #include "Lex.h"
 #include "Storage.h"
 #include "Debugger.h"
@@ -16,30 +17,43 @@
 #include "ExitCodes.h"
 #include "Runtime.h"
 
-int main() {
+int main(int argc, char *argv[]) {
   Storage storage = newStorage();
-  FILE *input = stdin;
+  FILE *input;
+  
+  if (argc == 2 && strcmp("-", argv[1]) == 0) {
+    input = stdin;
+  } else {
+    input = fopen("input.txt", "r");
+  }
+  
   FILE *output = stdout;
   FILE *errorout = stderr;
   FILE *warnout = stderr;
   
   DebuggerInit(errorout, warnout);
+  mpf_set_default_prec(512);
   
-  // Read input
-  LexInit(&storage, input);
-  while (LexUpdate());
+  { // Read input
+    LexInit(&storage, input);
+    while (LexUpdate());
   
-  if (DebuggerGetWasSyntaxError()) {
-    return WAS_SYNTAX_ERROR;
+  
+    if (DebuggerGetWasSyntaxError()) {
+      return WAS_SYNTAX_ERROR;
+    }
   }
   
-  // Compile to the ByteCode
-  CompilerInit(&storage);
-  CompilerCompile();
+  { // Compile to the ByteCode
+    Compiler compiler = newCompiler(&storage);
+    CompilerCompile(&compiler);
   
-  if (DebuggerGetWasCompileError()) {
-    return WAS_COMPILE_ERROR;
+    if (DebuggerGetWasCompileError()) {
+      return WAS_COMPILE_ERROR;
+    }
   }
+  
+  
   
   // Dump ByteCode
 //  for (unsigned int x = 0; x < storage.ByteCodeCount; x++) {

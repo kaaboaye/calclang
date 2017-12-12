@@ -135,12 +135,12 @@ bool ReadItem(Item *item, FILE *file) {
         return false;
       }
       
-      snum[i] = c;
+      snum[i] = (char)c;
       i++;
     }
     
     item->Type = type_number;
-    item->Value.Number = strtold(snum, NULL);
+    mpf_init_set_str(item->Value.Number, snum, 10);
     return true;
   }
   
@@ -174,29 +174,26 @@ Item ItemCalc(const Item b, const Item operator, const Item a) {
   
   // Set result type
   result.Type = type_number;
+  mpf_init(result.Value.Number);
   
   // Calc the result as float
   switch (operator.Value.Operator) {
     case operator_addition:
-      result.Value.Number = a.Value.Number + b.Value.Number;
+      mpf_add(result.Value.Number, a.Value.Number, b.Value.Number);
       break;
     case operator_subtraction:
-      result.Value.Number = a.Value.Number - b.Value.Number;
+      mpf_sub(result.Value.Number, a.Value.Number, b.Value.Number);
       break;
     case operator_multiplication:
-      result.Value.Number = a.Value.Number * b.Value.Number;
+      mpf_mul(result.Value.Number, a.Value.Number, b.Value.Number);
       break;
     case operator_division:
-      result.Value.Number = a.Value.Number / b.Value.Number;
+      mpf_div(result.Value.Number, a.Value.Number, b.Value.Number);
       break;
-    case operator_left_bracket:
+  
+    default:
+      DebuggerRuntimeError(operator.Line, "Unknown operator");
       break;
-    case operator_right_bracket:
-      break;
-    case operator_equals:
-      break;
-    case operator_semicolon:break;
-    case operator_colon:break;
   }
   
   return result;

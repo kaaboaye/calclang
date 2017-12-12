@@ -39,7 +39,7 @@ Variable _pi() {
   
   VariableAddItem(&var);
   var.LastItem->Type = type_number;
-  var.LastItem->Value.Number = M_PI;
+  mpf_init_set_d(var.LastItem->Value.Number, M_PI);
   
   return var;
 }
@@ -49,7 +49,7 @@ Variable _e() {
   
   VariableAddItem(&var);
   var.LastItem->Type = type_number;
-  var.LastItem->Value.Number = M_E;
+  mpf_init_set_d(var.LastItem->Value.Number, M_E);
   
   return var;
 }

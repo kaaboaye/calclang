@@ -11,7 +11,7 @@
 #include "ItemType.h"
 #include "ItemValue.h"
 
-#define NUM_LEN 32
+#define NUM_LEN 512
 
 #define END_OF_EXPRESSION(item) ( \
   item->Type == type_operator && ( \

@@ -14,8 +14,8 @@ typedef struct {
   Variable LexStorage; // Variable with main code
   
   unsigned int ByteCodeCount; // Amount of Byte Code variables (equations, operations)
-  Variable *ByteCode; // Variable with executable byte code
-  Variable *LastByteCode;
+  Variable *ByteCode; // Array of Variables with executable byte code
+  Variable *LastByteCode; // Last used ByteCode Variable
   
   unsigned int VariablesCount; // Amount of items
   Variable *Variables; // Array of variables

@@ -10,7 +10,7 @@
 #include "Debugger.h"
 
 void EquationInit() {
-  equationAns = 0.0;
+  mpf_init_set_d(equationAns, 0.0);
 }
 
 Item EquationSolve(const Variable *in) {
@@ -30,7 +30,7 @@ Item EquationRPNSolve(const Variable *in) {
       case type_procedure: {
         Item item;
         item.Type = type_number;
-        item.Value.Number = in->Items[i].Value.Procedure();
+        in->Items[i].Value.Procedure(&item.Value.Number);
         
         ItemsStackPush(&stack, item);
         break;
@@ -46,7 +46,7 @@ Item EquationRPNSolve(const Variable *in) {
               ItemsStackPop(&stack, &b)
             )
         ) {
-          DebuggerSyntaxError(in->Items[i].Line, "Wrong equation");
+          DebuggerSyntaxError(a.Line, "Wrong equation");
         }
         
         ItemsStackPush(&stack, ItemCalc(a, in->Items[i], b));
@@ -57,7 +57,7 @@ Item EquationRPNSolve(const Variable *in) {
   }
   
   ItemsStackPop(&stack, &result);
-  equationAns = result.Value.Number;
+  mpf_set(equationAns, result.Value.Number);
   
   return result;
 }
@@ -135,6 +135,6 @@ void EquationToRPN(const Variable *in, Variable *out) {
   }
 }
 
-long double EquationGetAns() {
-  return equationAns;
+void EquationGetAns(mpf_t num) {
+  mpf_init_set(num, equationAns);
 }

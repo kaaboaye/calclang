@@ -19,6 +19,8 @@ void RuntimeRun() {
   Variable *in;
   Item out;
   
+  EquationInit();
+  
   for (unsigned int i = 0; i < storage->ByteCodeCount; ++i) {
     in = &storage->ByteCode[i];
     
@@ -30,6 +32,6 @@ void RuntimeRun() {
       DebuggerRuntimeError(in[0].Items[0].Line, "Problem with calculating equation");
     }
     
-    fprintf(output, "%Lf\n", out.Value.Number);
+    gmp_fprintf(output, "%Ff\n", out.Value.Number);
   }
 }

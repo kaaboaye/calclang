@@ -5,6 +5,11 @@
 #include "Storage.h"
 #include "Variable.h"
 
+
+/**
+ * Initializes Storage object
+ * @return Empty Storage
+ */
 Storage newStorage(void) {
   Storage s;
   
