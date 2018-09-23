@@ -174,6 +174,8 @@ Item ItemCalc(const Item b, const Item operator, const Item a) {
   
   // Set result type
   result.Type = type_number;
+  
+  result.Line = b.Line;
   mpf_init(result.Value.Number);
   
   // Calc the result as float
